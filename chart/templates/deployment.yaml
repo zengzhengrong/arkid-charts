@@ -69,52 +69,6 @@ spec:
               containerPort: 8080
               protocol: TCP
           args: ["broker", "-t", "http://localhost", "-p", "8080"]
-
-        - name: "{{ .Chart.Name }}-{{ .Values.image.redis.name }}"
-          image: "{{ .Values.image.redis.repository }}:{{ .Values.image.redis.tag }}"
-          imagePullPolicy: {{ .Values.image.redis.pullPolicy }}
-
-        - name: "{{ .Chart.Name }}-{{ .Values.image.mysqlDatabase.name }}"
-          image: "{{ .Values.image.mysqlDatabase.repository}}:{{ .Values.image.mysqlDatabase.tag }}"
-          imagePullPolicy: {{ .Values.image.mysqlDatabase.pullPolicy }}
-          args:
-            - "--character-set-server=utf8mb4"
-            - "--collation-server=utf8mb4_unicode_ci"
-
-          {{- if .Values.persistence.init }}
-          env:
-            - name: MYSQL_ROOT_PASSWORD
-              value: {{ .Values.persistence.mysql.rootPassword}}
-            - name: MYSQL_DATABASE
-              value: {{ .Values.persistence.mysql.database}}
-          {{ end }}
-          volumeMounts:
-            - name: arkid-data
-              mountPath: /var/lib/mysql
-              subPath: mysql/data
-            - name: arkid-data
-              mountPath: /etc/mysql/conf.d
-              subPath: mysql/config
-
-        - name: "{{ .Chart.Name }}-{{ .Values.image.ldap.name }}"
-          image: "{{ .Values.image.ldap.repository }}:{{ .Values.image.ldap.tag }}"
-          imagePullPolicy: {{ .Values.image.ldap.pullPolicy }}
-          env:
-          - name: SQL_HOST
-            value: "127.0.0.1"
-          - name: SQL_PORT
-            value: "3306"
-          - name: SQL_USER
-            value: "root"
-          - name: SQL_PWD
-            value: "{{ .Values.persistence.mysql.rootPassword}}"
-          - name: LDAP_PASSWORD
-            value: "{{ .Values.ldap.adminPassword }}"
-          - name: SQL_DB
-            value: "{{ .Values.persistence.mysql.database}}"
-          - name: BACKEND
-            value: "sql"
-
       volumes:
         - name: settings-local
           configMap:

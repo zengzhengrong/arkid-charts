@@ -21,26 +21,15 @@ image:
     repository: nginx
     tag: "alpine"
     pullPolicy: IfNotPresent
-  redis:
-    name: redis
-    repository: redis
-    tag: "5.0.3"
-    pullPolicy: IfNotPresent
-  mysqlDatabase:
-    name: mysql-database
-    repository: mysql
-    tag: "5.7"
-    pullPolicy: IfNotPresent
-  ldap:
-    name: ldap
-    repository: longguikeji/ark-sql-ldap
-    tag: "1.2.0"
-    pullPolicy: IfNotPresent
 
 nameOverride: ""
 fullnameOverride: ""
 
-apiServer: http://ark-apisvr
+apiServer: ""
+
+redis:
+  host: 172.17.0.16
+  port: 6379
 
 service:
   type: ClusterIP
@@ -51,47 +40,30 @@ service:
   webServerBroker:
     port: 8080
   portal:
+    type: NodePort
     port: 80
-  ldap:
-    ldapPort: 389
-    ldapsPort: 636
-  mysqlDatabase:
-    port: 3306
 
-ldapService:
-  type: NodePort
-  addr: ldap://localhost
-  ldap:
-    port: 389
-    # nodePort: 30389
-  ldaps:
-    port: 636
-    # nodePort: 30636
-
-persistence:  # mysql
-  init: false
+persistence:
+  init: true
   mysql:
     rootPassword: root
     database: arkid
+    host: 172.17.0.16
+    port: 3306
   claimName: arkid
-  storageClass: null
+  storageClass: local-path
   accessMode: ReadWriteOnce
-  size: 8Gi
+  size: 1Gi
 
 ingress:
-  enabled: true
+  enabled: false
   cert: true
   annotations:
     kubernetes.io/ingress.class: nginx
     certmanager.k8s.io/cluster-issuer: letsencrypt-prod
   host:
     name: arkid.longguikeji.com
-  tls: true
-
-apiServer: http://ark-apisvr
-
-ldap:
-  adminPassword: admin
+  tls: false
 
 imagePullSecrets:
 

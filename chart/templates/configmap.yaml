@@ -15,8 +15,8 @@ data:
             'NAME': '{{ .Values.persistence.mysql.database }}',
             'USER': 'root',
             'PASSWORD': '{{ .Values.persistence.mysql.rootPassword }}',
-            'HOST': '127.0.0.1',
-            'PORT': '{{ .Values.service.mysqlDatabase.port }}',
+            'HOST': '{{ .Values.persistence.mysql.host }}',
+            'PORT': '{{ .Values.persistence.mysql.port }}',
             'OPTIONS': {
                 'autocommit': True,
                 'init_command': 'SET default_storage_engine=InnoDB',
@@ -24,8 +24,16 @@ data:
             },
         }
     }
-    LDAP_SERVER = '{{ .Values.ldapService.addr }}'
-    LDAP_CLUSTER_ADDR = 'ldap://{{ include "arkid.fullname" . }}-ldap.{{.Release.Namespace}}.svc.cluster.local'
+    REDIS_CONFIG = {
+    'HOST': '{{ .Values.redis.host }}',
+    'PORT': {{ .Values.redis.port }},
+    'DB': 3
+    }
+    REDIS_URL = 'redis://{}:{}/{}'.format(REDIS_CONFIG['HOST'], REDIS_CONFIG['PORT'], REDIS_CONFIG['DB']) if REDIS_CONFIG['PASSWORD'] is None \
+        else 'redis://:{}@{}:{}/{}'.format(REDIS_CONFIG['PASSWORD'], REDIS_CONFIG['HOST'], REDIS_CONFIG['PORT'], REDIS_CONFIG['DB'])
+    CACHES["default"]["LOCATION"] = REDIS_URL
+    CELERY_BROKER_URL = REDIS_URL
+
     DOMAIN="{{ .Values.ingress.host.name }}"
     PRIVATE_IP="{{ include "arkid.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local"
     {{ .Values.settingsLocal | indent 4}}

@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/instance: "{{ .Release.Name }}-portal"
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.service.portal.type }}
   ports:
     - port: {{ .Values.service.portal.port}}
       targetPort: 80
