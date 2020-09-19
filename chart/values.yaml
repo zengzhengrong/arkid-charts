@@ -28,7 +28,7 @@ fullnameOverride: ""
 apiServer: ""
 
 redis:
-  host: 172.17.0.16
+  host: redis.dev
   port: 6379
 
 service:
@@ -40,29 +40,28 @@ service:
   webServerBroker:
     port: 8080
   portal:
-    type: NodePort
+    type: ClusterIP
     port: 80
 
 persistence:
   init: true
   mysql:
-    rootPassword: root
+    rootPassword: fnuo123com
     database: arkid
-    host: 172.17.0.16
+    host: fnuoos-mysql-dev-svc.dev
     port: 3306
-  claimName: arkid
-  storageClass: local-path
+  claimName: arkid-test
+  storageClass: nfs-client
   accessMode: ReadWriteOnce
   size: 1Gi
 
 ingress:
-  enabled: false
+  enabled: true
   cert: false
   annotations:
     kubernetes.io/ingress.class: nginx
-    certmanager.k8s.io/cluster-issuer: letsencrypt-prod
   host:
-    name: arkid.longguikeji.com
+    name: k8s.arkid.izhim.cn
   tls: false
 
 imagePullSecrets:
@@ -70,10 +69,10 @@ imagePullSecrets:
 settingsLocal: |-
 
   CONFIG_VERSION = 'longgui-2019-08-12'
-
+  EXPIRING_TOKEN_LIFESPAN = datetime.timedelta(days=180)
   DINGDING_APP_KEY = ''
   DINGDING_APP_SECRET = ''
-  BASE_URL = 'https://arkid.longguikeji.com'
+  BASE_URL = 'https://k8s.arkid.izhim.cn'
 
   INSTALLED_APPS += ['ldap.sql_backend']
 
@@ -90,7 +89,7 @@ settingsLocal: |-
   SMS_ALIYUN_ACCESS_KEY_ID = ''
   SMS_ALIYUN_ACCESS_KEY_SECRET = ''
   SMS_ALIYUN_TEMPLATE_CODE = ''
-  SMS_ALIYUN_SIGNATURE = '龙归科技'
+  SMS_ALIYUN_SIGNATURE = '智莺科技'
 
   MINIO_ENDPOINT = 'minio.longguikeji.com'
   MINIO_ACCESS_KEY = ''

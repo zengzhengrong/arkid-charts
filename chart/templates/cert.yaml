@@ -1,23 +1,18 @@
 {{- if .Values.ingress.cert -}}
-{{- $domain := .Values.ingress.host.name -}}
-apiVersion: certmanager.k8s.io/v1alpha1
-kind: Certificate
+apiVersion: cert-manager.io/v1
+kind: Issuer
 metadata:
-  name: {{ .Release.Name }}-crt
-  namespace: {{ .Release.Namespace }}
+  name: {{ .Release.Name }}-letsencrypt-prod
 spec:
-  secretName: {{ .Release.Name }}-crt
-  dnsNames:
-    - {{ $domain }}
-  tls:
-    - {{ $domain }}
   acme:
-    config:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: 1726142454@qq.com
+    privateKeySecretRef:
+      name: {{ .Release.Name }}-letsencrypt-prod
+    solvers:
     - http01:
-        ingressClass: nginx
-      domains:
-      - {{ $domain }}
-  issuerRef:
-    name: letsencrypt-prod
-    kind: ClusterIssuer
+        ingress:
+          class: nginx
 {{- end }}
+
+

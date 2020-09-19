@@ -11,6 +11,7 @@ metadata:
     helm.sh/chart: {{ include "arkid.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
+    cert-manager.io/issuer: {{ .Release.Name }}-letsencrypt-prod
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -20,7 +21,7 @@ spec:
   tls:
     - hosts:
       - {{ $domain }}
-      secretName: {{ .Release.Name }}-crt
+      secretName: {{ .Release.Name }}-tls
 {{- end }}
   rules:
     - host: {{ $domain }}

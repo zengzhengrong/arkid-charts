@@ -1,3 +1,14 @@
+
+# 官方helm chart 地址
+https://github.com/longguikeji/arkid-charts
+
+# 阿里云云原生仓库
+https://developer.aliyun.com/hub/#/?_k=mvwbgs
+
+# 智莺更新
+1. 精简调不需要的组件，删除了ldap mysql redis 三个组件 减少1g内存使用
+2. 更新token保持半年（180天） 
+
 # ArkID
 
 ArkID是全新一代企业单点登录解决方案, 彻底告别企业内多系统多账号的烦恼, 节省管理成本, 自带功能全面的WEB管理界面，提升管理效率。

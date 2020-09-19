@@ -31,6 +31,7 @@ spec:
         name: setsysctl
         securityContext:
           privileged: true
+      nodeName: cn-shenzhen.172.18.63.65
       containers:
         - name: "{{ .Chart.Name }}-{{ .Values.image.webServer.name }}"
           image: "{{ .Values.image.webServer.repository }}:{{ .Values.image.webServer.tag }}"
