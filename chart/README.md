@@ -5,7 +5,7 @@ https://github.com/longguikeji/arkid-charts
 # 阿里云云原生仓库
 https://developer.aliyun.com/hub/#/?_k=mvwbgs
 
-# 智莺更新
+# 更新
 1. 精简调不需要的组件，删除了ldap mysql redis 三个组件 减少1g内存使用
 2. 更新token保持半年（180天） 
 
